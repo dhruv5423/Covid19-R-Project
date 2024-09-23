@@ -7,6 +7,7 @@ date: "today"
 date-format: long
 abstract: "The Covid-19 Pandemic caused irreparable damage to the infrastructure of our global systems, highlighting the neccessity to better understand factors that influence health outcomes. This paper uses data from OpenDataToronto to investigate how age and gender affects outcomes of those infected with the virus. xyz about results"
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
@@ -30,120 +31,51 @@ cleaned_covid_data <- read.csv(here("data/analysis_data/cleaned_covid_data.csv")
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+The Covid-19 Pandemic has had an unimaginable effect on human lives around the globe. As of April 13, 2024, Worldometer Info estimates that over 704 million people worldwide have contracted the virus, resulting in approximately 7 million deaths [@worldometer]. In Canada alone, there have been almost 4.6 million reported cases and more than 38,000 deaths as of July 20, 2024 [@infobase_ca].
 
-The remainder of this paper is structured as follows. @sec-data....
+While these statistics paint a harrowing picture of the human toll inflicted, the pandemic has exacerbated existing economic inequalities, destabilized political systems, and put immense pressure on societal infrastructure globally. Looking past the immediate health crisis, lockdowns and restrictions have had immeasurable impacts not only on global supply chains, but also on the mental heatlh of many forced to quarantine or self isolate.
+
+An article by Fortune valued the economic burden on the US Economy to be upwards of \$14 Trillion USD at the end of 2023 [@fortune]. While this figure mainly took into account the 'standard economic effects' of the pandemic - revenue lost due to mandatory business closures, decreases in air travel, and workplace absences - the article noted that there were many unobservable factors that were incredibly burdernsome to the economy, such as long term physical and mental health effects of the pandemic on the population.
+
+Covid-19 has been found to have varying effects across demographics. A 2020 article published in the PLOS Journal found that 'Covid-19 may be associated with worse outcomes in males than in females'. The article found that men are up to 22% more likely to require ICU admission.
+
+Moreover, an article published in the Springer Link Journal in 2021 found that older adults, in particular those above the age of 65, face higher mortality rates than their younger counterparts. Weaker immune systems, and the higher likely presence of other conditions can exacerbate the effects of the virus.
+
+Understanding how demographic variables like age and gender affect outcomes related to contracting viruses is increasingly important in the shaping of future policies and health measures. This paper aims to analyse the differences in outcomes for various age groups and genders among Covid-19 cases in Toronto, in an effort to contribute to deepening our understanding of the risk factors that may impact the lives of those with Covid-19, and possibly in future pandemics as well.
+
+The remainder of this paper is structured as follows. @sec-data xyz @sec-results xyz @sec-discussion xyz.
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+We use @citeR and @rohan.
 
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
+## Data Selection and Measurement
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
+## Raw Data
 
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
-
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
+## Data Cleaning
 
 Talk way more about it.
 
-# Model
+## Summary Statistics
 
-The goal of our modelling strategy is twofold. Firstly,...
+# Results {#sec-results}
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+## Cases over Time
 
-## Model set-up
+## Age vs Outcomes
 
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.
+## Gender vs Outcomes
 
-```{=tex}
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-```
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+# Discussion {#sec-discussion}
 
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
-# Results
-
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-# Discussion
-
-## First discussion point {#sec-first-point}
+## Effect of Age on Outcomes
 
 If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
-## Second discussion point
+## Effect of Gender on Outcomes
 
-## Third discussion point
+## Broader Discussion and Takeaways
 
 ## Weaknesses and next steps
 
@@ -151,62 +83,6 @@ Weaknesses and next steps should also be included.
 
 \newpage
 
-\appendix
-
-# Appendix {.unnumbered}
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows...
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
-\newpage
-
 # References
+
+# LLM Disclosure
