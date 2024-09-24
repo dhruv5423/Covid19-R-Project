@@ -100,10 +100,11 @@ raw_covid_data %>%
 
 ```
 
-(\scriptsize Table Separated using Tips from [@stack_tip] and LLMs)
+(Table Separated using Tips from [@stack_tip] and LLMs)
 
 ## Data Cleaning
 
+\scriptsize
 ```{r}
 #| label: tbl-clean
 #| tbl-cap: "COVID-19 Case Cleaned Data Part 2"
@@ -117,6 +118,7 @@ cleaned_covid_data %>%
   kable(col.names = c("x_id", "age_group", "client_gender", "reported_date", "ever_in_icu", "ever_hospitalized", "ever_intubated", "outcome"),
         booktabs = TRUE)
 ```
+\normalsize
 
 ## A Note on Measurement
 
@@ -124,17 +126,19 @@ cleaned_covid_data %>%
 -   updates on funding/measurement changes + discontinuation
 -   likely many unreported cases
 
+\newpage
+
 # Results {#sec-results}
 
-## Cases over Time
+## General Results
 
-@fig-cumulativecases displays the progression of COVID-19 cases in Toronto from January 2020 to March 2024.
+@fig-cumulativecases displays the progression of COVID-19 cases in Toronto from January 2020 to March 2024. @fig-treatmentoutcomes importantly highlights mortality rates by level of hospitalisation. That is, the mortality rates for those hospitalised, put in the ICU, and/or intubated.
 
 ```{r}
 #| label: fig-cumulativecases
 #| fig-cap: "COVID-19 Case Progression Over Time, Toronto"
 #| fig.width: 5
-#| fig.height: 3
+#| fig.height: 2.75
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -151,11 +155,17 @@ cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
 # Step 3: Plot cumulative cases over time
 ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
   geom_line(color = "blue", size = 1) +
-  labs(title = "Cumulative COVID-19 Cases Over Time in Toronto",
+  labs(title = "COVID-19 Cases Over Time, Toronto",
        x = "Date",
        y = "COVID-19 Cases") +
+  theme(
+    plot.title = element_text(size = 12),        # Reduce the title font size
+    axis.title.x = element_text(size = 10),      # Reduce the x-axis title font size
+    axis.title.y = element_text(size = 10),      # Reduce the y-axis title font size
+    axis.text.x = element_text(size = 8),        # Reduce the x-axis text (labels) font size
+    axis.text.y = element_text(size = 8),        # Reduce the y-axis text (labels) font size
+  ) +
   scale_x_date(limits = as.Date(c("2020-01-01", "2024-03-31")))
-              
 
 ```
 
@@ -163,7 +173,7 @@ ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
 #| label: fig-treatmentoutcomes
 #| fig-cap: "Level of Hospitalisation vs Mortality Rates"
 #| fig.width: 5
-#| fig.height: 3
+#| fig.height: 2.75
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -196,16 +206,24 @@ hospitalised_mortality_data <- data.frame(
 # Step 2: Plot the mortality rate as a bar graph
 ggplot(hospitalised_mortality_data, aes(x = Condition, y = Mortality_Rate)) +
   geom_bar(stat = "identity", fill = "steelblue") +
-  labs(title = "Mortality Rate by Condition (Intubated, Hospitalized, ICU)",
+  labs(title = "Mortality by Condition (Intubated, Hospitalized, ICU)",
        x = "Condition",
        y = "Mortality Rate (%)") +
   theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12),        # Reduce the title font size
+    axis.title.x = element_text(size = 10),      # Reduce the x-axis title font size
+    axis.title.y = element_text(size = 10),      # Reduce the y-axis title font size
+    axis.text.x = element_text(size = 8),        # Reduce the x-axis text (labels) font size
+    axis.text.y = element_text(size = 8),        # Reduce the y-axis text (labels) font size
+  ) +
   ylim(0, 100)  # Set y-axis limits to 0-100 for percentage
 
 ```
 
 ## Age vs Outcomes
 
+@fig-agegroupmortality shows the differences in mortality rates for different age groups at the time of contracting COVID-19. @fig-agegrouphospitalisation shows the hospitalisation, ICU, or intubation rates for different age groups. 
 ```{r}
 #| label: fig-agegroupmortality
 #| fig-cap: "Age Group vs Mortality Rates"
@@ -255,7 +273,7 @@ ggplot(mortality_by_age_group, aes(x = Age_Group, y = Mortality_Rate)) +
 
 ```{r}
 #| label: fig-agegrouphospitalisation
-#| fig-cap: "Chance of Hospitalisation by Age Group"
+#| fig-cap: "Hospitalisation, Intubation, ICU Admission Rate by Age"
 #| fig.width: 5
 #| fig.height: 3
 #| fig.align: center
@@ -306,15 +324,27 @@ long_hosp_data <- hospitalisation_data %>%
 # Step 4: Plot Age Group vs Chance of Hospitaliation, Intubation, or ICU as a grouped bar chart
 ggplot(long_hosp_data, aes(x = Age_Group, y = Rate, fill = Condition)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Hospitalisation, Intubation, ICU Admission by Age Group",
+  labs(title = "Hospitalisation, Intubation, ICU Admission Rate by Age",
        x = "Age Group",
        y = "Percentage (%)") +
   theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12),        # Reduce the title font size
+    axis.title.x = element_text(size = 10),      # Reduce the x-axis title font size
+    axis.title.y = element_text(size = 10),      # Reduce the y-axis title font size
+    axis.text.x = element_text(size = 8),        # Reduce the x-axis text (labels) font size
+    axis.text.y = element_text(size = 8),        # Reduce the y-axis text (labels) font size
+    legend.title = element_text(size = 8),       # Reduce the legend title font size
+    legend.text = element_text(size = 6)         # Reduce the legend text font size
+  ) +
   ylim(0, 25) +  # Set y-axis limits to 0-100%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 ```
+\newpage
+
 ## Gender vs Outcomes
 
+@fig-gendermortality graphs COVID-19 mortality rates by gender. @fig-genderhospitalisation graphs hospitalisation, ICU and/or incubation rates by gender. That is, how likely a person who has contracted COVID-19 is likely to be in any of these conditions, by gender.
 ```{r}
 #| label: fig-gendermortality
 #| fig-cap: "COVID-19 Mortality by Gender"
@@ -358,23 +388,97 @@ ggplot(mortality_by_gender, aes(x = Client_Gender, y = Mortality_Rate)) +
   ylim(0, 2)  # Set y-axis limits to 0-100 for percentage
 
 ```
+
+```{r}
+#| label: fig-genderhospitalisation
+#| fig-cap: "Hospitalisation, ICU, Intubation Rate by Gender"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+# Step 1: Calculate the rates for hospitalization, intubation, and ICU admission by gender
+genders <- c("MALE", "FEMALE", "OTHER")
+
+hospitalization_data_gender <- data.frame(
+  Client_Gender = genders,
+  Hospitalization_Rate = sapply(genders, function(gender) {
+    df_gender <- cleaned_covid_data %>% filter(client_gender == gender)
+    calc_condition_rate(df_gender, "ever_hospitalized")
+  }),
+  Intubation_Rate = sapply(genders, function(gender) {
+    df_gender <- cleaned_covid_data %>% filter(client_gender == gender)
+    calc_condition_rate(df_gender, "ever_intubated")
+  }),
+  ICU_Rate = sapply(genders, function(gender) {
+    df_gender <- cleaned_covid_data %>% filter(client_gender == gender)
+    calc_condition_rate(df_gender, "ever_in_icu")
+  })
+)
+
+# Step 2: Reshape the data to long format for grouped bar plot
+long_data_gender <- hospitalization_data_gender %>%
+  pivot_longer(cols = c(Hospitalization_Rate, Intubation_Rate, ICU_Rate),
+               names_to = "Condition",
+               values_to = "Rate")
+
+# Step 3: Plot Gender vs Chance of Hospitalization, Intubation, or ICU as a grouped bar chart
+ggplot(long_data_gender, aes(x = Client_Gender, y = Rate, fill = Condition)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Hospitalization, Intubation, or ICU by Gender",
+       x = "Gender",
+       y = "Percentage (%)") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12),        # Reduce the title font size
+    axis.title.x = element_text(size = 10),      # Reduce the x-axis title font size
+    axis.title.y = element_text(size = 10),      # Reduce the y-axis title font size
+    axis.text.x = element_text(size = 8),        # Reduce the x-axis text (labels) font size
+    axis.text.y = element_text(size = 8),        # Reduce the y-axis text (labels) font size
+    legend.title = element_text(size = 8),       # Reduce the legend title font size
+    legend.text = element_text(size = 6)         # Reduce the legend text font size
+  ) +
+  ylim(0, 10) +  # Set y-axis limits to 0-100%
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5))  # Keep x-axis labels horizontal
+```
 # Discussion {#sec-discussion}
 
 ## Effect of Age on Outcomes
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
+Understanding the effect age has on COVID-19 is extremely important both for potential victims and those in charge of policy to put in place correct and appropriate health measures for different ages. 
+
+Looking at @fig-agegroupmortality, we see a clear message - age group and mortality are positively correlated. More specifically, mortality past the ages of 50-59 shoots from under half a percent to 1.72% for 60-69 years of age. This only worsens as individuals get older. For the age groups 70-79 and 80-89, the mortality rate if one contracts COVID-19 shoots to 4.14% and 7.50% respectively. Moreover, those who contract COVID-19 at ages of 90 and above have a mortality rate of almost 10% (9.62%). 
+
+In contrast, those younger than 50 at the time of contraction have mortality rates under 0.5%. In fact, those 19 and younger have a mortality rate of only 0.007%. Clearly, age and mortalty are very strongly correlated. 
+
+Perhaps of more relevance are chances of hospitalisation, admission to the ICU, and intubation. In reference to @fig-agegrouphospitalisation, we see that the older population is much more susceptible to having more severe cases of COVID-19. For all ages above 70, the chance of hospitalisation is above 15%, peaking at 19.46% for 80-89 year olds. Compared to the younger population, this is a stark difference. Those under 30 have hospitalisation rates of under 30%. This increases with age: hospital admission rates for those with COVID-19 is 1.15% for 30-39 year olds, 2.13% for 40-49 year olds, 4.15% for 50-59 year olds, and 8.91% for 60-69 year olds. 
+
+discussion about weaker immune systems with age (bring in some literature review)
 
 ## Effect of Gender on Outcomes
 
+Similar to age, understanding differences in outcomes for genders matter greatly to virologists and as a matter of public safety. Looking at @fig-gendermortality, we find that males that contract COVID-19 have a much higher mortality rate when compared to females (1.47% vs 1.06%). According to this data, males who contract COVID-19 are almost 1.4 times more likely to die than females.
+
+Similarly, looking at @fig-genderhospitalisation, we see that males are more likely to be hospitalised, put in the ICU, and intubated. 
+
+discussion about how Covid-19 affects the male body vs female; lit and scientific review; is this a worldwide trend?
+
+
 ## Broader Discussion and Takeaways
+
+Reference the importance of @fig-treatmentoutcomes - those intubated have almost a 50% chance of death. (what?!) 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+Measurement weaknesses (stopped collecting data), might be important to look at selection biases (are there more male cases than females? what about Other genders? are they affect results?
 
 \newpage
 
 # LLM Disclosure
+
+ChatGPT Data Analyst was used to generate code and help fix bugs for this assignment. A full LLM Disclosure can be found on the GitHub Repository under "Other - LLM - usage.txt"
 
 # References
 
