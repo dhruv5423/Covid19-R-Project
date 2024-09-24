@@ -1,0 +1,28 @@
+Age_Group,Condition,Rate
+19 and younger,Hospitalization_Rate,0.7995513829344622
+19 and younger,Intubation_Rate,0.016280458023552397
+19 and younger,ICU_Rate,0.07959335033736727
+20 to 29 Years,Hospitalization_Rate,0.6518266604833307
+20 to 29 Years,Intubation_Rate,0.038645849435770596
+20 to 29 Years,ICU_Rate,0.08630906373988767
+30 to 39 Years,Hospitalization_Rate,1.1584744034264736
+30 to 39 Years,Intubation_Rate,0.10061866884220544
+30 to 39 Years,ICU_Rate,0.20123733768441088
+40 to 49 Years,Hospitalization_Rate,2.1334218618954433
+40 to 49 Years,Intubation_Rate,0.2603438635728264
+40 to 49 Years,ICU_Rate,0.44904948280682133
+50 to 59 Years,Hospitalization_Rate,4.150929143375133
+50 to 59 Years,Intubation_Rate,0.5892128720350506
+50 to 59 Years,ICU_Rate,0.9366973863121318
+60 to 69 Years,Hospitalization_Rate,8.906712872393943
+60 to 69 Years,Intubation_Rate,1.408529428204125
+60 to 69 Years,ICU_Rate,2.364317254485495
+70 to 79 Years,Hospitalization_Rate,16.23576357136919
+70 to 79 Years,Intubation_Rate,1.779034001163854
+70 to 79 Years,ICU_Rate,3.1382492310250227
+80 to 89 Years,Hospitalization_Rate,19.459413223847406
+80 to 89 Years,Intubation_Rate,0.8724659994867847
+80 to 89 Years,ICU_Rate,1.7663159695492259
+90 and older,Hospitalization_Rate,15.562276601594721
+90 and older,Intubation_Rate,0.192466318394281
+90 and older,ICU_Rate,0.556777563926313

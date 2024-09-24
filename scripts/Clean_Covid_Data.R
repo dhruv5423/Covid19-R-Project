@@ -41,3 +41,4 @@ cleaned_covid_data <- raw_covid_data %>%
 
 #### Save data ####
 write_csv(cleaned_covid_data, "data/analysis_data/cleaned_covid_data.csv")
+

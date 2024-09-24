@@ -66,9 +66,13 @@ Data used in this report was sourced from OpenDataToronto's portal. @opendatator
 
 In it's original form, the dataset contains more than 414,000 entries regarding information on cases of Covid-19 in Toronto. Below are two tables with the first three rwos of the raw data, separated into two tables for readability.
 
-### Table 1: Sample of Raw Covid-19 Data
+```{r}
+#| label: tbl-raw1
+#| tbl-cap: "COVID-19 Case Raw Data"
+#| echo: false
+#| warning: false
+#| message: false
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(kableExtra)
 
 # First part of Table 1 (first few columns)
@@ -77,6 +81,15 @@ raw_covid_data %>%
   head(3) %>%
   knitr::kable(booktabs = TRUE) %>%
   kable_styling(font_size = 8)
+
+```
+
+```{r}
+#| label: tbl-raw2
+#| tbl-cap: "COVID-19 Case Raw Data Part 2"
+#| echo: false
+#| warning: false
+#| message: false
 
 # Second part of Table 1 (next set of columns)
 raw_covid_data %>%
@@ -91,8 +104,13 @@ raw_covid_data %>%
 
 ## Data Cleaning
 
-### Table 2: Sample of Cleaned Covid-19 Data
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
+#| label: tbl-clean
+#| tbl-cap: "COVID-19 Case Cleaned Data Part 2"
+#| echo: false
+#| warning: false
+#| message: false
+#| 
 # Cleaned Data Table (Table 2)
 cleaned_covid_data %>%
   head(5) %>%
@@ -100,19 +118,6 @@ cleaned_covid_data %>%
         booktabs = TRUE)
 ```
 
-## Summary Statistics
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-cleaned_covid_data %>%
-  summarise(
-    total_cases = n(),
-    age_group_distribution = table(age_group),
-    gender_distribution = table(client_gender),
-    outcome_distribution = table(outcome),
-    earliest_reported_date = min(reported_date, na.rm = TRUE),
-    latest_reported_date = max(reported_date, na.rm = TRUE)
-  )
-```
 ## A Note on Measurement
 
 -   gold data quality
@@ -123,11 +128,236 @@ cleaned_covid_data %>%
 
 ## Cases over Time
 
+@fig-cumulativecases displays the progression of COVID-19 cases in Toronto from January 2020 to March 2024.
+
+```{r}
+#| label: fig-cumulativecases
+#| fig-cap: "COVID-19 Case Progression Over Time, Toronto"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Step 1: Ensure reported_date is in Date format
+cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
+
+# Step 3: Plot cumulative cases over time
+ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
+  geom_line(color = "blue", size = 1) +
+  labs(title = "Cumulative COVID-19 Cases Over Time in Toronto",
+       x = "Date",
+       y = "COVID-19 Cases") +
+  scale_x_date(limits = as.Date(c("2020-01-01", "2024-03-31")))
+              
+
+```
+
+```{r}
+#| label: fig-treatmentoutcomes
+#| fig-cap: "Level of Hospitalisation vs Mortality Rates"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+
+# Step 1: Calculate mortality rate for intubated, hospitalized, and ICU patients
+# Create a summary table with mortality rates
+
+calc_mortality_rate <- function(df, condition_col) {
+  total_patients <- nrow(df %>% filter(!!sym(condition_col) == "Yes"))
+  fatal_patients <- nrow(df %>% filter(!!sym(condition_col) == "Yes" & outcome == "FATAL"))
+  if (total_patients > 0) {
+    return(fatal_patients / total_patients * 100)  # Return mortality rate as percentage
+  } else {
+    return(NA)  # Return NA if no patients in the group
+  }
+}
+
+# Apply the function for each group
+hospitalised_mortality_data <- data.frame(
+  Condition = c("Intubated", "Hospitalized", "ICU"),
+  Mortality_Rate = c(
+    calc_mortality_rate(cleaned_covid_data, "ever_intubated"),
+    calc_mortality_rate(cleaned_covid_data, "ever_hospitalized"),
+    calc_mortality_rate(cleaned_covid_data, "ever_in_icu")
+  )
+)
+
+# Step 2: Plot the mortality rate as a bar graph
+ggplot(hospitalised_mortality_data, aes(x = Condition, y = Mortality_Rate)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Mortality Rate by Condition (Intubated, Hospitalized, ICU)",
+       x = "Condition",
+       y = "Mortality Rate (%)") +
+  theme_minimal() +
+  ylim(0, 100)  # Set y-axis limits to 0-100 for percentage
+
+```
 
 ## Age vs Outcomes
 
+```{r}
+#| label: fig-agegroupmortality
+#| fig-cap: "Age Group vs Mortality Rates"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+
+# Step 1: Define the calc_mortality_rate function for age group
+calc_mortality_rate_age <- function(df, age_group_col) {
+  total_patients <- nrow(df %>% filter(!!sym(age_group_col) != ""))
+  fatal_patients <- nrow(df %>% filter(!!sym(age_group_col) != "" & outcome == "FATAL"))
+  if (total_patients > 0) {
+    return(fatal_patients / total_patients * 100)  # Return mortality rate as percentage
+  } else {
+    return(NA)  # Return NA if no patients in the group
+  }
+}
+
+# Step 2: Calculate mortality rate for each age group
+age_groups <- c("19 and younger", "20 to 29 Years", "30 to 39 Years", 
+                "40 to 49 Years", "50 to 59 Years", "60 to 69 Years", 
+                "70 to 79 Years", "80 to 89 Years", "90 and older")
+
+mortality_by_age_group <- data.frame(
+  Age_Group = age_groups,
+  Mortality_Rate = sapply(age_groups, function(group) {
+    df_age_group <- cleaned_covid_data %>% filter(age_group == group)
+    calc_mortality_rate_age(df_age_group, "age_group")
+  })
+)
+
+# Step 3: Plot Age Group vs Mortality Rate as a bar chart
+ggplot(mortality_by_age_group, aes(x = Age_Group, y = Mortality_Rate)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Mortality Rate by Age Group",
+       x = "Age Group",
+       y = "Mortality Rate (%)") +
+  theme_minimal() +
+  ylim(0, 15) +  # Set y-axis limits to 0-15 for percentage
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
+```
+
+```{r}
+#| label: fig-agegrouphospitalisation
+#| fig-cap: "Chance of Hospitalisation by Age Group"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+
+
+# Step 1: Define a function to calculate rates for each condition (hospitalization, intubation, ICU)
+calc_condition_rate <- function(df, condition_col) {
+  total_patients <- nrow(df %>% filter(!is.na(!!sym(condition_col))))  # Non-missing values for the condition
+  condition_patients <- nrow(df %>% filter(!!sym(condition_col) == "Yes"))
+  if (total_patients > 0) {
+    return(condition_patients / total_patients * 100)  # Return rate as a percentage
+  } else {
+    return(NA)  # Return NA if no patients in the group
+  }
+}
+
+# Step 2: Calculate the rates for hospitalization, intubation, and ICU admission by age group
+age_groups <- c("19 and younger", "20 to 29 Years", "30 to 39 Years", 
+                "40 to 49 Years", "50 to 59 Years", "60 to 69 Years", 
+                "70 to 79 Years", "80 to 89 Years", "90 and older")
+
+hospitalisation_data <- data.frame(
+  Age_Group = age_groups,
+  Hospitalization_Rate = sapply(age_groups, function(group) {
+    df_age_group <- cleaned_covid_data %>% filter(age_group == group)
+    calc_condition_rate(df_age_group, "ever_hospitalized")
+  }),
+  Intubation_Rate = sapply(age_groups, function(group) {
+    df_age_group <- cleaned_covid_data %>% filter(age_group == group)
+    calc_condition_rate(df_age_group, "ever_intubated")
+  }),
+  ICU_Rate = sapply(age_groups, function(group) {
+    df_age_group <- cleaned_covid_data %>% filter(age_group == group)
+    calc_condition_rate(df_age_group, "ever_in_icu")
+  })
+)
+
+# Step 3: Reshape the data to long format for grouped bar plot
+long_hosp_data <- hospitalisation_data %>%
+  pivot_longer(cols = c(Hospitalization_Rate, Intubation_Rate, ICU_Rate),
+               names_to = "Condition",
+               values_to = "Rate")
+
+# Step 4: Plot Age Group vs Chance of Hospitaliation, Intubation, or ICU as a grouped bar chart
+ggplot(long_hosp_data, aes(x = Age_Group, y = Rate, fill = Condition)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Hospitalisation, Intubation, ICU Admission by Age Group",
+       x = "Age Group",
+       y = "Percentage (%)") +
+  theme_minimal() +
+  ylim(0, 25) +  # Set y-axis limits to 0-100%
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+```
 ## Gender vs Outcomes
 
+```{r}
+#| label: fig-gendermortality
+#| fig-cap: "COVID-19 Mortality by Gender"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
+
+# Step 1: Define the calc_mortality_rate function (as used previously)
+calc_mortality_rate_gender <- function(df, gender_col) {
+  total_patients <- nrow(df %>% filter(!!sym(gender_col) != ""))
+  fatal_patients <- nrow(df %>% filter(!!sym(gender_col) != "" & outcome == "FATAL"))
+  if (total_patients > 0) {
+    return(fatal_patients / total_patients * 100)  # Return mortality rate as percentage
+  } else {
+    return(NA)  # Return NA if no patients in the group
+  }
+}
+
+# Step 2: Calculate mortality rate for each gender (MALE, FEMALE, OTHER)
+genders <- c("MALE", "FEMALE", "OTHER")
+
+mortality_by_gender <- data.frame(
+  Client_Gender = genders,
+  Mortality_Rate = sapply(genders, function(gender) {
+    df_gender <- cleaned_covid_data %>% filter(client_gender == gender)
+    calc_mortality_rate_gender(df_gender, "client_gender")
+  })
+)
+
+# Step 3: Plot Gender vs Mortality Rate as a bar chart
+ggplot(mortality_by_gender, aes(x = Client_Gender, y = Mortality_Rate)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Mortality Rate by Gender",
+       x = "Client Gender",
+       y = "Mortality Rate (%)") +
+  theme_minimal() +
+  ylim(0, 2)  # Set y-axis limits to 0-100 for percentage
+
+```
 # Discussion {#sec-discussion}
 
 ## Effect of Age on Outcomes
@@ -144,6 +374,7 @@ Weaknesses and next steps should also be included.
 
 \newpage
 
+# LLM Disclosure
+
 # References
 
-# LLM Disclosure
