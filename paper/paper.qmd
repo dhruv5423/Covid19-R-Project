@@ -1,11 +1,11 @@
 ---
-title: "Toronto's Covid-19 Impact: Effect of Age and Gender on Outcomes"
+title: "Toronto's COVID-19 Impact: Effect of Age and Gender on Outcomes"
 author: 
   - Dhruv Gupta
 thanks: "Code and data are available at: https://github.com/dhruv5423/Covid19-R-Project"
 date: "today"
 date-format: long
-abstract: "The Covid-19 Pandemic caused irreparable damage to the infrastructure of our global systems, highlighting the neccessity to better understand factors that influence health outcomes. This paper uses data from OpenDataToronto to investigate how age and gender affects outcomes of those infected with the virus. xyz about results"
+abstract: "The COVID-19 Pandemic caused irreparable damage to the infrastructure of our global systems, highlighting the neccessity to better understand factors that influence health outcomes. This paper uses data from OpenDataToronto to investigate how age and gender affects outcomes of those infected with the virus. We find that in Toronto, age is strongly correlated with mortality and poorer hospitalisation outcomes. Further, we find that males in Toronto are almost 1.4 times more likely to die from COVID-19 than females."
 format: pdf
 toc: true
 number-sections: true
