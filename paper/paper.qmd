@@ -1,5 +1,5 @@
 ---
-title: "Toronto's Covid-19 Impact: How did Age and Gender affect Outcomes?"
+title: "Toronto's Covid-19 Impact: Effect of Age and Gender on Outcomes"
 author: 
   - Dhruv Gupta
 thanks: "Code and data are available at: https://github.com/dhruv5423/Covid19-R-Project"
@@ -10,6 +10,8 @@ format: pdf
 toc: true
 number-sections: true
 bibliography: references.bib
+header-includes:
+  - \usepackage{float}
 ---
 
 ```{r}
@@ -18,16 +20,21 @@ bibliography: references.bib
 #| message: false
 
 #Loading Packages
+library(pander)
 library(tidyverse)
 library(here)
 library(palmerpenguins)
 library(opendatatoronto)
 library(tinytex)
+library(knitr)
+library(kableExtra)
 
 #Loading Data
 raw_covid_data <- read.csv(here("data/raw_data/raw_covid_data.csv"))
 cleaned_covid_data <- read.csv(here("data/analysis_data/cleaned_covid_data.csv"))
 ```
+
+\newpage
 
 # Introduction
 
@@ -43,25 +50,79 @@ Moreover, an article published in the Springer Link Journal in 2021 found that o
 
 Understanding how demographic variables like age and gender affect outcomes related to contracting viruses is increasingly important in the shaping of future policies and health measures. This paper aims to analyse the differences in outcomes for various age groups and genders among Covid-19 cases in Toronto, in an effort to contribute to deepening our understanding of the risk factors that may impact the lives of those with Covid-19, and possibly in future pandemics as well.
 
-The remainder of this paper is structured as follows. @sec-data xyz @sec-results xyz @sec-discussion xyz.
+The remainder of this paper is structured as follows. @sec-data discusses @sec-results xyz @sec-discussion xyz.
+
+\newpage
 
 # Data {#sec-data}
 
 We use @citeR and @rohan.
 
-## Data Selection and Measurement
+## Data Selection
+
+Data used in this report was sourced from OpenDataToronto's portal. @opendatatoronto. More specifically, the dataset "Covid-19 Cases in Toronto" was used and cleaned for the purposes of this report. Toronto Public Health (TPH) released anonymized, person-level data from the start of the pandemic in January 2020. The data spans from the first reported case on in January of 2020 to February 14th, 2024. In a statement on the website for this dataset, OpenDataToronto states that "As case and outbreak management guidelines changed and COVID-19 specific resources were no longer funded, the level of detail available for cases decreased, and more recent data are less complete and not comparable to previous years. TPH discontinued the production of this report with the final refresh as of February 14, 2024" @opendatatoronto_set
 
 ## Raw Data
 
+In it's original form, the dataset contains more than 414,000 entries regarding information on cases of Covid-19 in Toronto. Below are two tables with the first three rwos of the raw data, separated into two tables for readability.
+
+### Table 1: Sample of Raw Covid-19 Data
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(kableExtra)
+
+# First part of Table 1 (first few columns)
+raw_covid_data %>%
+  select(X_id, Outbreak.Associated, Assigned_ID, Age.Group, Neighbourhood.Name, FSA, Source.of.Infection, Classification) %>%
+  head(3) %>%
+  knitr::kable(booktabs = TRUE) %>%
+  kable_styling(font_size = 8)
+
+# Second part of Table 1 (next set of columns)
+raw_covid_data %>%
+  select(Episode.Date, Reported.Date, Client.Gender, Outcome, Ever.Hospitalized, Ever.in.ICU, Ever.Intubated) %>%
+  head(3) %>%
+  knitr::kable(booktabs = TRUE) %>%
+  kable_styling(font_size = 8)
+
+```
+
+(\scriptsize Table Separated using Tips from [@stack_tip] and LLMs)
+
 ## Data Cleaning
 
-Talk way more about it.
+### Table 2: Sample of Cleaned Covid-19 Data
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Cleaned Data Table (Table 2)
+cleaned_covid_data %>%
+  head(5) %>%
+  kable(col.names = c("x_id", "age_group", "client_gender", "reported_date", "ever_in_icu", "ever_hospitalized", "ever_intubated", "outcome"),
+        booktabs = TRUE)
+```
 
 ## Summary Statistics
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+cleaned_covid_data %>%
+  summarise(
+    total_cases = n(),
+    age_group_distribution = table(age_group),
+    gender_distribution = table(client_gender),
+    outcome_distribution = table(outcome),
+    earliest_reported_date = min(reported_date, na.rm = TRUE),
+    latest_reported_date = max(reported_date, na.rm = TRUE)
+  )
+```
+## A Note on Measurement
+
+-   gold data quality
+-   updates on funding/measurement changes + discontinuation
+-   likely many unreported cases
 
 # Results {#sec-results}
 
 ## Cases over Time
+
 
 ## Age vs Outcomes
 

@@ -41,3 +41,7 @@ unique(cleaned_covid_data$age_group)
 # 3c) Test for Unique Outcome Values to only return RESOLVED, ACTIVE, and FATAL
 
 unique(cleaned_covid_data$outcome)
+
+## Test 4: Test to see if Reported Date is of type 'Date'
+
+class(cleaned_covid_data$reported_date)

@@ -16,7 +16,7 @@ raw_covid_data <- read_csv("data/raw_data/raw_covid_data.csv")
 cleaned_covid_data <- raw_covid_data %>%
   
   ## Selecting the Variables of Interest
-  select(`X_id`, `Age.Group`, `Client.Gender`, `Reported.Date`, `Outcome`) %>%
+  select(`X_id`, `Age.Group`, `Client.Gender`, `Reported.Date`, `Ever.in.ICU`, `Ever.Hospitalized`, `Ever.Intubated`, `Outcome`)  %>%
   
   ## Cleaning the Names of the Variables
   janitor::clean_names() %>%
