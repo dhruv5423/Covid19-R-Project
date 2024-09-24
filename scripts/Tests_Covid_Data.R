@@ -20,6 +20,7 @@ cleaned_covid_data <- read_csv("data/analysis_data/cleaned_covid_data.csv")
 sum(is.na(cleaned_covid_data$age_group))
 sum(is.na(cleaned_covid_data$client_gender))
 sum(is.na(cleaned_covid_data$outcome))
+sum(is.na(cleaned_covid_data$reported_date))
 
 
 ## Test 2: Empty Strings Test in Variables of Interest
