@@ -5,7 +5,7 @@ author:
 thanks: "Code and data are available at: https://github.com/dhruv5423/Covid19-R-Project"
 date: "today"
 date-format: long
-abstract: "The COVID-19 Pandemic caused irreparable damage to the infrastructure of our global systems, highlighting the neccessity to better understand factors that influence health outcomes. This paper uses data from OpenDataToronto to investigate how age and gender affects outcomes of those infected with the virus. We find that in Toronto, age is strongly correlated with mortality and poorer hospitalisation outcomes. Further, we find that males have significantly worse outcomes than females in both mortality rates and hopsitalisation outcomes"
+abstract: "The COVID-19 Pandemic caused irreparable damage to the infrastructure of our global systems, highlighting the neccessity to better understand factors that influence health outcomes. This paper uses data from OpenDataToronto to investigate how age and gender affects outcomes of those infected with the virus. We find that in Toronto, age is strongly correlated with mortality and poorer hospitalisation outcomes. Further, we find that males have significantly worse outcomes than females in both mortality rates and hopsitalisation outcomes."
 format: pdf
 toc: true
 number-sections: true
@@ -38,7 +38,7 @@ cleaned_covid_data <- read.csv(here("data/analysis_data/cleaned_covid_data.csv")
 
 The Covid-19 Pandemic has had an unimaginable effect on human lives around the globe. As of April 13, 2024, Worldometer Info estimates that over 704 million people worldwide have contracted the virus, resulting in approximately 7 million deaths [@worldometer]. In Canada alone, there have been almost 4.6 million reported cases and more than 38,000 deaths as of July 20, 2024 [@infobase_ca].While these statistics paint a harrowing picture of the human toll inflicted, the pandemic has exacerbated existing economic inequalities, destabilized political systems, and put immense pressure on societal infrastructure globally. Looking past the immediate health crisis, lockdowns and restrictions have had immeasurable impacts not only on global supply chains, but also on the mental heatlh of many forced to quarantine or self isolate.
 
-Importantly, Covid-19 has been found to have varying effects across demographics. A 2020 article published in the PLOS Journal found that 'Covid-19 may be associated with worse outcomes in males than in females'. The article found that men are up to 22% more likely to require ICU admission. @plos Moreover, an article published in the Springer Link Journal in 2021 found that older adults, in particular those above the age of 65, face higher mortality rates than their younger counterparts. Weaker immune systems, and the higher likely presence of other conditions can exacerbate the effects of the virus. @springer
+Importantly, Covid-19 has been found to have varying effects across demographics. A 2020 article published in the PLOS Journal found that 'Covid-19 may be associated with worse outcomes in males than in females'. The article found that men are up to 22% more likely to require ICU admission [@plos]. Moreover, an article published in the Springer Link Journal in 2021 found that older adults, in particular those above the age of 65, face higher mortality rates than their younger counterparts. Weaker immune systems, and the higher likely presence of other conditions can exacerbate the effects of the virus [@springer].
 
 Understanding how demographic variables like age and gender affect outcomes related to contracting viruses is increasingly important in the shaping of future policies and health measures. This paper aims to analyse the differences in outcomes for various age groups and genders among Covid-19 cases in Toronto, in an effort to contribute to deepening our understanding of the risk factors that may impact the lives of those with Covid-19, and possibly in future pandemics as well.
 
@@ -50,13 +50,13 @@ The remainder of this paper is structured as follows. @sec-data discusses data s
 
 ## A Note on Data Selection and Measurement
 
-Data used in this report was sourced from OpenDataToronto's portal. @opendatatoronto. More specifically, the data set "Covid-19 Cases in Toronto" was used and cleaned for the purposes of this report. 
+Data used in this report was sourced from OpenDataToronto's portal [@opendatatoronto]. More specifically, the data set "COVID-19 Cases in Toronto" was used and cleaned for the purposes of this report. 
 
-Toronto Public Health (TPH) collects COVID-19 case data in different ways. If an individual tests positive at a healthcare provider or laboratory, it is reported to TPH. Furthermore, in 'high-risk settings', such as hospitals and nursing homes, management is required to report positive cases to TPH. TPH also uses extensive contact tracing methods to monitor potential spreads of COVID-19. @covid_reporting. They released anonymized, person-level data from the start of the pandemic in January 2020 to  OpenDataToronto.The data spans from the first reported case on in January of 2020 to February 14th, 2024. In a statement on the website for this dataset, OpenDataToronto states that "As case and outbreak management guidelines changed and COVID-19 specific resources were no longer funded, the level of detail available for cases decreased, and more recent data are less complete and not comparable to previous years. TPH discontinued the production of this report with the final refresh as of February 14, 2024" @opendatatoronto_set.
+Toronto Public Health (TPH) collects COVID-19 case data in different ways. If an individual tests positive at a healthcare provider or laboratory, it is reported to TPH. Furthermore, in 'high-risk settings', such as hospitals and nursing homes, management is required to report positive cases to TPH. TPH also uses extensive contact tracing methods to monitor potential spreads of COVID-19 [@covid_reporting]. They released anonymizsd, person-level data from the start of the pandemic in January 2020 to  OpenDataToronto.The data spans from the first reported case on in January of 2020 to February 14th, 2024. In a statement on the website for this dataset, OpenDataToronto states that "As case and outbreak management guidelines changed and COVID-19 specific resources were no longer funded, the level of detail available for cases decreased, and more recent data are less complete and not comparable to previous years. TPH discontinued the production of this report with the final refresh as of February 14, 2024" [@opendatatoronto_set].
 
-The data set received a 'Gold' quality score, which takes into account the freshness, usability, metadata, accessibility and completeness of the data. This adds to the credibility of the data. However, there are likely many unreported cases due to the fact that it is not mandatory to report COVID-19 if you test positive using an over-the-counter antigen test. This likely leads to some under-reporting, and hence the data might not be fully representative of the overall effect COVID-19 had in Toronto.
+The data set received a 'Gold' quality score, which takes into account the freshness, usability, metadata, accessibility and completeness of the data. This adds to the credibility of the data. However, there are likely many unreported cases due to the fact that it is not mandatory to report COVID-19 if you test positive using an over-the-counter antigen test. This likely leads to some under-reporting, and hence the data might not be fully representative of the overall impact COVID-19 had in Toronto.
 
-This project uses @citeR to simulate, download, clean, plot, and analyse the data provided by @opendatatoronto-set. 
+This project uses @citeR to simulate, download, clean, plot, and analyse the data provided by @opendatatoronto_set. 
 
 ## Raw Data
 
@@ -101,7 +101,7 @@ raw_covid_data %>%
 
 ## Data Cleaning
 
-There were a variety of issues and fixes needed to be done to the raw data in order to get it ready for analysis. In order to download, clean and run tests on the data, the package Tidyverse, @rohan was used.
+There were a variety of issues and fixes needed to be done to the raw data in order to get it ready for analysis. In order to download, clean and run tests on the data, the package Tidyverse, [@rohan] was used.
 
 When cleaning the data, the first step was to select appropriate variables of interest to analyse. The raw data had many different variables to pick from, but this report importantly selected the variables 'Age Group', 'Client Gender', 'Reported Date', and 'Outcome'. This was done to run some basic analysis for the differences in outcomes for age groups and genders. Additionally, the variables 'Ever Hospitalized', 'Ever In Icu', and 'Ever Intubated' were selected to provide further depth to analysis regarding the severity of cases across age and gender.
 
@@ -130,13 +130,13 @@ cleaned_covid_data %>%
 
 ## General Results
 
-@fig-cumulativecases displays the progression of COVID-19 cases in Toronto from January 2020 to March 2024. @fig-treatmentoutcomes importantly highlights mortality rates by level of hospitalisation. That is, the mortality rates for those hospitalised, put in the ICU, and/or intubated.
+@fig-cumulativecases displays the progression of COVID-19 cases in Toronto from January 2020 to March 2024. @fig-treatmentoutcomes importantly shows mortality rates by the severity of hospitalisation outcomes.
 
 ```{r}
 #| label: fig-cumulativecases
 #| fig-cap: "COVID-19 Case Progression Over Time, Toronto"
 #| fig.width: 5
-#| fig.height: 2.75
+#| fig.height: 2.85
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -155,7 +155,7 @@ ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
   geom_line(color = "blue", size = 1) +
   labs(title = "COVID-19 Cases Over Time, Toronto",
        x = "Date",
-       y = "COVID-19 Cases") +
+       y = "COVID-19 Cases (Hundred Thousands)") +
   theme(
     plot.title = element_text(size = 12),        # Reduce the title font size
     axis.title.x = element_text(size = 10),      # Reduce the x-axis title font size
@@ -163,6 +163,7 @@ ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
     axis.text.x = element_text(size = 8),        # Reduce the x-axis text (labels) font size
     axis.text.y = element_text(size = 8),        # Reduce the y-axis text (labels) font size
   ) +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-5)) +
   scale_x_date(limits = as.Date(c("2020-01-01", "2024-03-31")))
 
 ```
@@ -171,7 +172,7 @@ ggplot(cleaned_covid_data, aes(x = reported_date, y = x_id)) +
 #| label: fig-treatmentoutcomes
 #| fig-cap: "Level of Hospitalisation vs Mortality Rates"
 #| fig.width: 5
-#| fig.height: 2.75
+#| fig.height: 2.85
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -221,12 +222,12 @@ ggplot(hospitalised_mortality_data, aes(x = Condition, y = Mortality_Rate)) +
 
 ## Age vs Outcomes
 
-@fig-agegroupmortality shows the differences in mortality rates for different age groups at the time of contracting COVID-19. @fig-agegrouphospitalisation shows the hospitalisation, ICU, or intubation rates for different age groups. 
+@fig-agegroupmortality shows differences in mortality rates for different age groups at the time of contracting COVID-19. 
 ```{r}
 #| label: fig-agegroupmortality
 #| fig-cap: "Age Group vs Mortality Rates"
-#| fig.width: 5
-#| fig.height: 3
+#| fig.width: 4.75
+#| fig.height: 2.8
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -264,16 +265,71 @@ ggplot(mortality_by_age_group, aes(x = Age_Group, y = Mortality_Rate)) +
        x = "Age Group",
        y = "Mortality Rate (%)") +
   theme_minimal() +
-  ylim(0, 15) +  # Set y-axis limits to 0-15 for percentage
+  ylim(0, 10) +  # Set y-axis limits to 0-15 for percentage
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 
 ```
+@fig-fatalities-pie shows the share of fatalities made up by larger binned age groups.
+```{r}
+#| label: fig-fatalities-pie
+#| fig-cap: "Fatalities by Age Group"
+#| fig.width: 5
+#| fig.height: 3
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-pos: "H"
 
+# Step 1: Group age groups as required
+cleaned_covid_data <- cleaned_covid_data %>%
+  mutate(age_group_binned = case_when(
+    age_group %in% c("60 to 69 Years", "70 to 79 Years", "80 to 89 Years", "90 and older") ~ "60+",
+    age_group %in% c("30 to 39 Years", "40 to 49 Years", "50 to 59 Years") ~ "30-59",
+    age_group %in% c("19 and younger", "20 to 29 Years") ~ "Under 30",
+    TRUE ~ "Unknown"
+  ))
+
+# Step 2: Filter only fatal outcomes and calculate percentages
+fatalities_by_age_group <- cleaned_covid_data %>%
+  filter(outcome == "FATAL") %>%
+  group_by(age_group_binned) %>%
+  summarise(total_fatalities = n()) %>%
+  ungroup() %>%
+  mutate(percentage = total_fatalities / sum(total_fatalities) * 100)  # Calculate percentage
+
+# Step 3: Create a pie chart with annotations for "60+"
+ggplot(fatalities_by_age_group, aes(x = "", y = total_fatalities, fill = age_group_binned)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  labs(
+    title = "Fatalities by Age Group",
+    x = NULL,
+    y = NULL,
+    fill = "Age Group"  # Set legend title to "Age Group"
+  ) +
+  theme_void() +  # Remove background, gridlines, and axis labels
+  theme(
+    plot.title = element_text(size = 14, hjust = 0.5),  # Center the title
+    legend.title = element_text(size = 12),  # Adjust the legend title size
+    legend.text = element_text(size = 10),   # Adjust the legend text size
+    legend.position = "right"                # Position the legend on the right
+  ) +
+  geom_text(
+    data = fatalities_by_age_group %>% filter(age_group_binned %in% c("60+")),  # Annotate only 60+
+    aes(label = paste0(round(percentage, 1), "%")),  # Add percentage label
+    position = position_stack(vjust = 0.5),  # Place text inside the pie chart
+    size = 5,  # Font size of the annotation
+    color = "black"  # Text color
+  ) +
+  scale_fill_manual(values = c("60+" = "skyblue", "30-59" = "orange", "Under 30" = "green", "Unknown" = "gray"))
+```
+@fig-agegrouphospitalisation shows the hospitalisation, ICU, and intubation rates for different age groups.
 ```{r}
 #| label: fig-agegrouphospitalisation
 #| fig-cap: "Hospitalisation, Intubation, ICU Admission Rate by Age"
 #| fig.width: 5
-#| fig.height: 3
+#| fig.height: 2.9
 #| fig.align: center
 #| echo: false
 #| warning: false
@@ -338,16 +394,17 @@ ggplot(long_hosp_data, aes(x = Age_Group, y = Rate, fill = Condition)) +
   ylim(0, 25) +  # Set y-axis limits to 0-100%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 ```
-
+@fig-agetimemortality shows how mortality rates have progressed over time for different age groups.
 ```{r}
-#| label: fig-agegroup-mortality-time-line
+#| label: fig-agetimemortality
 #| fig-cap: "Mortality Rate Over Time by Age Group"
-#| fig.width: 7
-#| fig.height: 4
+#| fig.width: 6.8
+#| fig.height: 3.75
 #| fig.align: center
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-pos: "H"
 
 # Step 1: Convert reported_date to Date format if not already done
 cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
@@ -398,7 +455,7 @@ ggplot(mortality_by_age_group_month, aes(x = month, y = mortality_rate, color = 
 
 ## Gender vs Outcomes
 
-@fig-gendermortality graphs COVID-19 mortality rates by gender. @fig-genderhospitalisation graphs hospitalisation, ICU and/or incubation rates by gender. That is, how likely a person who has contracted COVID-19 is likely to be in any of these conditions, by gender.
+@fig-gendermortality graphs COVID-19 mortality rates across genders.
 ```{r}
 #| label: fig-gendermortality
 #| fig-cap: "COVID-19 Mortality by Gender"
@@ -442,7 +499,7 @@ ggplot(mortality_by_gender, aes(x = Client_Gender, y = Mortality_Rate)) +
   ylim(0, 2)  # Set y-axis limits to 0-100 for percentage
 
 ```
-
+@fig-genderhospitalisation shows the hospitalisation, ICU, and intubation rates for different genders.
 ```{r}
 #| label: fig-genderhospitalisation
 #| fig-cap: "Hospitalisation, ICU, Intubation Rate by Gender"
@@ -497,16 +554,17 @@ ggplot(long_data_gender, aes(x = Client_Gender, y = Rate, fill = Condition)) +
   ylim(0, 10) +  # Set y-axis limits to 0-100%
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5))  # Keep x-axis labels horizontal
 ```
-
+@fig-gendertimemortality graphs monthly aggregated mortality rates across genders over time.
 ```{r}
-#| label: fig-gender-mortality-time-line
+#| label: fig-gendertimemortality
 #| fig-cap: "Mortality Rate Over Time by Gender"
-#| fig.width: 7
-#| fig.height: 4
+#| fig.width: 6.8
+#| fig.height: 3.75
 #| fig.align: center
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-pos: "H"
 
 # Step 1: Ensure reported_date is in Date format if not already done
 cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
@@ -552,34 +610,37 @@ ggplot(mortality_by_gender_month, aes(x = month, y = mortality_rate, color = cli
 
 ## Effect of Age on Outcomes
 
-Understanding the effect age has on COVID-19 is extremely important both for potential victims and those in charge of policy to put in place correct and appropriate health measures for different ages. 
+Understanding the effect COVID-19 has on different age groups is extremely important both for potential victims and those in charge of policy to put in place appropriate health measures.
 
-Looking at @fig-agegroupmortality, we see a clear message - age group and mortality are positively correlated. More specifically, mortality past the ages of 50-59 shoots from under half a percent to 1.72% for 60-69 years of age. This only worsens as individuals get older. For the age groups 70-79 and 80-89, the mortality rate if one contracts COVID-19 shoots to 4.14% and 7.50% respectively. Moreover, those who contract COVID-19 at ages of 90 and above have a mortality rate of almost 10% (9.62%). 
+Looking at @fig-agegroupmortality, we see a clear message - age group and mortality are positively correlated. Specifically, mortality past the ages of 50-59 shoots from under half a percent to 1.72% for those 60-69 years of age. This only worsens as individuals get older. For the age groups 70-79 and 80-89, the mortality rate if one contracted COVID-19 shoots to 4.14% and 7.50% respectively. Moreover, those who contracted COVID-19 at ages of 90 and above had a mortality rate of almost 10% (9.62%). In contrast, those younger than 50 at the time of contraction had mortality rates under 0.5%. In fact, those 19 and younger had a mortality rate of only 0.007%. Further, we see in @fig-fatalities-pie that those above 60 made up the vast majority of fatalities: 92.6%. Ages 30-59 made up 7.2% of fatalities, with less than 0.2% of fatalities coming from those younger than 30.
 
-In contrast, those younger than 50 at the time of contraction have mortality rates under 0.5%. In fact, those 19 and younger have a mortality rate of only 0.007%. Clearly, age and mortalty are very strongly correlated. 
+Additionally, in reference to @fig-agegrouphospitalisation, we see that the older population is much more susceptible to having more severe cases of COVID-19. For all ages above 70, the chance of hospitalisation is above 15%, peaking at 19.46% for 80-89 year olds. Compared to the younger population, this is a stark difference. Those under 30 have hospitalisation rates of under 30%. This increases with age: hospital admission rates for those with COVID-19 is 1.15% for 30-39 year olds, 2.13% for 40-49 year olds, 4.15% for 50-59 year olds, and 8.91% for 60-69 year olds. ICU rates and intubation rates show similar trends - as an individual gets older, COVID-19 affects them more severely. This data is even more harrowing when paired with the findings from @fig-treatmentoutcomes, which shows a 17.7% risk of mortality if hospitalised from COVID-19, a 39% chance of mortality if placed in the ICU, and almost a 50% chance of mortality if intubated. 
 
-Perhaps of more relevance are chances of hospitalisation, admission to the ICU, and intubation. In reference to @fig-agegrouphospitalisation, we see that the older population is much more susceptible to having more severe cases of COVID-19. For all ages above 70, the chance of hospitalisation is above 15%, peaking at 19.46% for 80-89 year olds. Compared to the younger population, this is a stark difference. Those under 30 have hospitalisation rates of under 30%. This increases with age: hospital admission rates for those with COVID-19 is 1.15% for 30-39 year olds, 2.13% for 40-49 year olds, 4.15% for 50-59 year olds, and 8.91% for 60-69 year olds. 
-
-discussion about weaker immune systems with age (bring in some literature review)
+As individuals age, there is a gradual decline in immune function, known as immunosenescene, which impairs the body's ability to recognize and eliminate pathogens, like SARS-CoV 2, the pathogen responsible for COVID-19. Additionally, our immune systems suffer a 'chronic increase in systemic inflammation called inflammaging' as we grow older [@age_covid_lit]. The article also notes age-associated comorbidities that may accelerate epigenetic age, and increase susceptibility to COVID-19. These could include higher rates of cardiovascular disease, diabetes, and other age-related diseases as one ages.
 
 ## Effect of Gender on Outcomes
 
-Similar to age, understanding differences in outcomes for genders matter greatly to virologists and as a matter of public safety. Looking at @fig-gendermortality, we find that males that contract COVID-19 have a much higher mortality rate when compared to females (1.47% vs 1.06%). According to this data, males who contract COVID-19 are almost 1.4 times more likely to die than females.
+Similar to age, understanding differences in COVID-19 outcomes for genders matter greatly to virologists and as a matter of public safety.
 
-Similarly, looking at @fig-genderhospitalisation, we see that males are more likely to be hospitalised, put in the ICU, and intubated. 
+Looking at @fig-gendermortality, we find that males that contracted COVID-19 had a much higher mortality rate when compared to females (1.47% vs 1.06%). In other words, males who contracted COVID-19 were almost 1.4 times more likely to die than females. Further, @fig-genderhospitalisation tells us that males were more likely to be hospitalised, put in the ICU, and intubated - almost 5.5% of males who contract COVID-19 were hospitalised, compared to 4% for females. 1% of males had to be placed in the ICU, with almost 0.6% having to be intubated, while females had much lower ICU rates (0.53%) and intubation rates (0.28%). Again, in conjunction with the results from @fig-treatmentoutcomes (which relates hospitalisation outcomes to mortality), this is an important distinction, further hammering home the point that males were more susceptible to worse outcomes if they contracted COVID-19.
 
-discussion about how Covid-19 affects the male body vs female; lit and scientific review; is this a worldwide trend?
+In looking at scientific literature, an article from the University of Toronto notes that differences in chromosomal makeup largely explains the increased severity for males with COVID-19. The ACE2 receptor, which SARS-CoV 2 uses to enter cells, is located on the X Chromosome. Females, who have XX chromosomes, have an extra copy of ACE2, effectively have more protection against inflammation and organ damage during infection. Males on the other hand, only have 1 copy of the ACE2 receptor, as they have XY chromosomes. Because of this, 'there is not enough of the protein to fulfil its usual function of tampering down inflammation and preventing organ damage' [@uoft_covid_article]. Importantly, the study found that men infected with SARS-CoV 2 who externally supplemented ACE2 daily through an inhaler had less virus in their lungs, less lung injury, and higher estrogen signalling - protecting them from more severe COVID-19 outcomes.
 
+The significance of this discovery cannot be understated - Professor Zhang, the leader of the study imagines a world where inhaling a puff of ACE2 before entering high-risk situations is commonplace for men, to better protect them from contracting COVID-19 [@uoft_covid_article].
 
 ## Broader Discussion and Takeaways
 
-Reference the importance of @fig-treatmentoutcomes - those intubated have almost a 50% chance of death. (what?!) 
+@fig-agetimemortality and @fig-gendertimemortality were included in this report to illustrate broader takeaways regarding the implementation of vaccinations on overall mortality rates. In both graphs, we find that mortality, aggregated over a month, is relatively high during the start of the pandemic in 2020. This is especially true for the older population - the pink, cyan, and yellow-green line graphs in @fig-agetimemortality. The erratic behaviour in mortality only normalises after 2022. In @fig-gendertimemortality, on the other hand,  male and female mortality seemed to remain close to 2.5% after normalizing in 2021, while other genders experienced greater volatility toward the start of the pandemic and similarly normalised post 2021. This was likely due to low observations for other genders, increasing variance in results. 
+
+Interestingly, this normalisation in mortality rates to reasonable levels coincides with vaccination efforts in Toronto. Health Canada first approved a Pfizer-BioNTech on December 9th, 2020, which was first administered on December 14th, 2020 [@infobase_vaccines]. From this mark on, we see a gradual decrease in mortality in both figures. The 50% threshold of the Canadian population received at least 1 dose of a COVID-19 vaccine was crossed on May 22, 2021, a huge milestone in vaccination efforts. At this point, we see very low mortality rates across genders in @fig-gendertimemortality, and a continued downward trend in mortality across age groups. Further, the spike in mortality created by the Omicron variant in late 2021 seen in @fig-agetimemortality quickly dies down as new booster shot programs were introduced during these months [@globalnews].
+
+The parallels between a decrease in mortality with the introduction of vaccinations show the positive effect vaccines can have on protecting the population from viruses. This is incredibly important for policymakers and virologists as they learn from the impact of COVID-19 to better prepare for future health crises.  
 
 ## Weaknesses and next steps
 
-Measurement weaknesses (stopped collecting data), might be important to look at selection biases (are there more male cases than females? what about Other genders? are they affect results?
+As referenced in @sec-data, the quality and depth of reporting for this data set decreased as less funding for COVID-19 resources decreased. This may have resulted in recent data being less complete than previous years, and cause some concerns for reliability when searching for temporal trends. Additionally, data may not be fully representative of the population due to under-reporting of COVID-19 cases. The non-mandatory nature of reporting may introduce selection biases, as cases with higher severity are more likely to be documented and reported by Toronto Public Health.
 
-
+An interesting next step would be to investigate comorbidity data in conjunction with this data set, to see how different comorbodities affect outcomes, and how comorbidities vary with age. As discussed in @sec-results, current scientific consensus agrees that the prevalence of pre-existing conditions worsens immune system responses and COVID-19 outcomes. Studying this theory in the context of this data might be useful to Toronto's public health systems in preparing and caring for those with comorbidities, during a public health crisis.  
 
 # LLM Disclosure
 
