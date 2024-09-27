@@ -20,8 +20,8 @@ header-includes:
 #| message: false
 
 #Loading Packages
-library(pander)
 library(tidyverse)
+library(lintr)
 library(here)
 library(palmerpenguins)
 library(opendatatoronto)
@@ -34,41 +34,38 @@ raw_covid_data <- read.csv(here("data/raw_data/raw_covid_data.csv"))
 cleaned_covid_data <- read.csv(here("data/analysis_data/cleaned_covid_data.csv"))
 ```
 
-\newpage
-
 # Introduction
 
-The Covid-19 Pandemic has had an unimaginable effect on human lives around the globe. As of April 13, 2024, Worldometer Info estimates that over 704 million people worldwide have contracted the virus, resulting in approximately 7 million deaths [@worldometer]. In Canada alone, there have been almost 4.6 million reported cases and more than 38,000 deaths as of July 20, 2024 [@infobase_ca].
+The Covid-19 Pandemic has had an unimaginable effect on human lives around the globe. As of April 13, 2024, Worldometer Info estimates that over 704 million people worldwide have contracted the virus, resulting in approximately 7 million deaths [@worldometer]. In Canada alone, there have been almost 4.6 million reported cases and more than 38,000 deaths as of July 20, 2024 [@infobase_ca].While these statistics paint a harrowing picture of the human toll inflicted, the pandemic has exacerbated existing economic inequalities, destabilized political systems, and put immense pressure on societal infrastructure globally. Looking past the immediate health crisis, lockdowns and restrictions have had immeasurable impacts not only on global supply chains, but also on the mental heatlh of many forced to quarantine or self isolate.
 
-While these statistics paint a harrowing picture of the human toll inflicted, the pandemic has exacerbated existing economic inequalities, destabilized political systems, and put immense pressure on societal infrastructure globally. Looking past the immediate health crisis, lockdowns and restrictions have had immeasurable impacts not only on global supply chains, but also on the mental heatlh of many forced to quarantine or self isolate.
-
-An article by Fortune valued the economic burden on the US Economy to be upwards of \$14 Trillion USD at the end of 2023 [@fortune]. While this figure mainly took into account the 'standard economic effects' of the pandemic - revenue lost due to mandatory business closures, decreases in air travel, and workplace absences - the article noted that there were many unobservable factors that were incredibly burdernsome to the economy, such as long term physical and mental health effects of the pandemic on the population.
-
-Covid-19 has been found to have varying effects across demographics. A 2020 article published in the PLOS Journal found that 'Covid-19 may be associated with worse outcomes in males than in females'. The article found that men are up to 22% more likely to require ICU admission.
-
-Moreover, an article published in the Springer Link Journal in 2021 found that older adults, in particular those above the age of 65, face higher mortality rates than their younger counterparts. Weaker immune systems, and the higher likely presence of other conditions can exacerbate the effects of the virus.
+Importantly, Covid-19 has been found to have varying effects across demographics. A 2020 article published in the PLOS Journal found that 'Covid-19 may be associated with worse outcomes in males than in females'. The article found that men are up to 22% more likely to require ICU admission. @plos Moreover, an article published in the Springer Link Journal in 2021 found that older adults, in particular those above the age of 65, face higher mortality rates than their younger counterparts. Weaker immune systems, and the higher likely presence of other conditions can exacerbate the effects of the virus. @springer
 
 Understanding how demographic variables like age and gender affect outcomes related to contracting viruses is increasingly important in the shaping of future policies and health measures. This paper aims to analyse the differences in outcomes for various age groups and genders among Covid-19 cases in Toronto, in an effort to contribute to deepening our understanding of the risk factors that may impact the lives of those with Covid-19, and possibly in future pandemics as well.
 
-The remainder of this paper is structured as follows. @sec-data discusses @sec-results xyz @sec-discussion xyz.
+The remainder of this paper is structured as follows. @sec-data discusses data selecting and cleaning techniques, and provides a sample of the raw and cleaned data. @sec-results displays relevant figures found through the analysis - general results, age specific results, and gender specific results. @sec-discussion discusses these results in detail, the broader significance of the findings, and highlights some weaknesses and next steps that could be taken to improve the report.
 
 \newpage
 
 # Data {#sec-data}
 
-We use @citeR and @rohan.
+## A Note on Data Selection and Measurement
 
-## Data Selection
+Data used in this report was sourced from OpenDataToronto's portal. @opendatatoronto. More specifically, the data set "Covid-19 Cases in Toronto" was used and cleaned for the purposes of this report. 
 
-Data used in this report was sourced from OpenDataToronto's portal. @opendatatoronto. More specifically, the dataset "Covid-19 Cases in Toronto" was used and cleaned for the purposes of this report. Toronto Public Health (TPH) released anonymized, person-level data from the start of the pandemic in January 2020. The data spans from the first reported case on in January of 2020 to February 14th, 2024. In a statement on the website for this dataset, OpenDataToronto states that "As case and outbreak management guidelines changed and COVID-19 specific resources were no longer funded, the level of detail available for cases decreased, and more recent data are less complete and not comparable to previous years. TPH discontinued the production of this report with the final refresh as of February 14, 2024" @opendatatoronto_set
+Toronto Public Health (TPH) collects COVID-19 case data in different ways. If an individual tests positive at a healthcare provider or laboratory, it is reported to TPH. Furthermore, in 'high-risk settings', such as hospitals and nursing homes, management is required to report positive cases to TPH. TPH also uses extensive contact tracing methods to monitor potential spreads of COVID-19. @covid_reporting. They released anonymized, person-level data from the start of the pandemic in January 2020 to  OpenDataToronto.The data spans from the first reported case on in January of 2020 to February 14th, 2024. In a statement on the website for this dataset, OpenDataToronto states that "As case and outbreak management guidelines changed and COVID-19 specific resources were no longer funded, the level of detail available for cases decreased, and more recent data are less complete and not comparable to previous years. TPH discontinued the production of this report with the final refresh as of February 14, 2024" @opendatatoronto_set.
+
+The data set received a 'Gold' quality score, which takes into account the freshness, usability, metadata, accessibility and completeness of the data. This adds to the credibility of the data. However, there are likely many unreported cases due to the fact that it is not mandatory to report COVID-19 if you test positive using an over-the-counter antigen test. This likely leads to some under-reporting, and hence the data might not be fully representative of the overall effect COVID-19 had in Toronto.
+
+This project uses @citeR to simulate, download, clean, plot, and analyse the data provided by @opendatatoronto-set. 
 
 ## Raw Data
 
-In it's original form, the dataset contains more than 414,000 entries regarding information on cases of Covid-19 in Toronto. Below are two tables with the first three rwos of the raw data, separated into two tables for readability.
+In it's original form, the dataset contains more than 414,000 entries regarding information on cases of Covid-19 in Toronto. @tbl-raw1 and @tbl-raw2 below are samples of the first three rows of the raw data, separated into two tables for readability.
+
 
 ```{r}
 #| label: tbl-raw1
-#| tbl-cap: "COVID-19 Case Raw Data"
+#| tbl-cap: "COVID-19 Case Raw Data (Part 1)"
 #| echo: false
 #| warning: false
 #| message: false
@@ -77,7 +74,7 @@ library(kableExtra)
 
 # First part of Table 1 (first few columns)
 raw_covid_data %>%
-  select(X_id, Outbreak.Associated, Assigned_ID, Age.Group, Neighbourhood.Name, FSA, Source.of.Infection, Classification) %>%
+  select(X_id, Outbreak.Associated, Age.Group, Neighbourhood.Name, FSA, Source.of.Infection, Classification) %>%
   head(3) %>%
   knitr::kable(booktabs = TRUE) %>%
   kable_styling(font_size = 8)
@@ -86,7 +83,7 @@ raw_covid_data %>%
 
 ```{r}
 #| label: tbl-raw2
-#| tbl-cap: "COVID-19 Case Raw Data Part 2"
+#| tbl-cap: "COVID-19 Case Raw Data (Part 2)"
 #| echo: false
 #| warning: false
 #| message: false
@@ -104,27 +101,28 @@ raw_covid_data %>%
 
 ## Data Cleaning
 
+There were a variety of issues and fixes needed to be done to the raw data in order to get it ready for analysis. In order to download, clean and run tests on the data, the package Tidyverse, @rohan was used.
+
+When cleaning the data, the first step was to select appropriate variables of interest to analyse. The raw data had many different variables to pick from, but this report importantly selected the variables 'Age Group', 'Client Gender', 'Reported Date', and 'Outcome'. This was done to run some basic analysis for the differences in outcomes for age groups and genders. Additionally, the variables 'Ever Hospitalized', 'Ever In Icu', and 'Ever Intubated' were selected to provide further depth to analysis regarding the severity of cases across age and gender.
+
+Next, the Janitor package as part of Tidyverse was used to clean up the names of the variables, converting them to snake lowercase format; for example, 'Age.Group' was cleaned to 'age_group'. Another key step in the cleaning process was to arrange the data in chronological order, and then match Case ID's to the chronologically adjusted dates. This was done in order to have a clearer picture on the time trends of mortality and case progression of COVID-19 in Toronto. Further, the variable 'Client Gender' took on many different values in the raw data, so for simplicity, genders other than Male and Female were combined to take the value 'Other'. Finally, NA values were removed. After running tests, there were 422 NA values associated with the raw data, which were dropped. 
+
+@tbl-clean is a sample of the first 3 rows of the new cleaned data table.
 \scriptsize
 ```{r}
 #| label: tbl-clean
-#| tbl-cap: "COVID-19 Case Cleaned Data Part 2"
+#| tbl-cap: "Sample of COVID-19 Case Cleaned Data"
 #| echo: false
 #| warning: false
 #| message: false
 #| 
-# Cleaned Data Table (Table 2)
+# Cleaned Data Table
 cleaned_covid_data %>%
-  head(5) %>%
+  head(3) %>%
   kable(col.names = c("x_id", "age_group", "client_gender", "reported_date", "ever_in_icu", "ever_hospitalized", "ever_intubated", "outcome"),
         booktabs = TRUE)
 ```
 \normalsize
-
-## A Note on Measurement
-
--   gold data quality
--   updates on funding/measurement changes + discontinuation
--   likely many unreported cases
 
 \newpage
 
@@ -340,7 +338,63 @@ ggplot(long_hosp_data, aes(x = Age_Group, y = Rate, fill = Condition)) +
   ylim(0, 25) +  # Set y-axis limits to 0-100%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 ```
-\newpage
+
+```{r}
+#| label: fig-agegroup-mortality-time-line
+#| fig-cap: "Mortality Rate Over Time by Age Group"
+#| fig.width: 7
+#| fig.height: 4
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+
+# Step 1: Convert reported_date to Date format if not already done
+cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
+
+# Step 2: Aggregate data by age group and month, calculate mortality rate for each month
+mortality_by_age_group_month <- cleaned_covid_data %>%
+  mutate(month = floor_date(reported_date, "month")) %>%  # Create a new column for month
+  group_by(age_group, month) %>%
+  summarize(
+    total_cases = n(),
+    fatal_cases = sum(outcome == "FATAL"),
+    mortality_rate = ifelse(total_cases > 0, fatal_cases / total_cases * 100, NA)
+  ) %>%
+  filter(!is.na(mortality_rate))  # Remove rows where mortality_rate is NA
+
+# Custom color palette for age groups
+age_group_colors <- c(
+  "19 and younger" = "#1f77b4",  # Blue
+  "20 to 29 Years" = "#ff7f0e",  # Orange
+  "30 to 39 Years" = "#2ca02c",  # Green
+  "40 to 49 Years" = "#d62728",  # Red
+  "50 to 59 Years" = "#9467bd",  # Purple
+  "60 to 69 Years" = "#8c564b",  # Brown
+  "70 to 79 Years" = "#e377c2",  # Pink
+  "80 to 89 Years" = "#17becf",  # Cyan
+  "90 and older" = "#bcbd22"     # Yellow-green
+)
+
+# Step 3: Plot the mortality rate over time (monthly aggregation) with custom colors
+ggplot(mortality_by_age_group_month, aes(x = month, y = mortality_rate, color = age_group)) +
+  geom_line(size = 1) +  # Create a line plot for each age group
+  scale_color_manual(values = age_group_colors) +  # Apply custom colors
+  labs(
+    title = "Mortality Rate Over Time by Age Group (Monthly Aggregated Data)",
+    x = "Date",
+    y = "Mortality Rate (%)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8)
+  )
+```
+
 
 ## Gender vs Outcomes
 
@@ -443,6 +497,57 @@ ggplot(long_data_gender, aes(x = Client_Gender, y = Rate, fill = Condition)) +
   ylim(0, 10) +  # Set y-axis limits to 0-100%
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5))  # Keep x-axis labels horizontal
 ```
+
+```{r}
+#| label: fig-gender-mortality-time-line
+#| fig-cap: "Mortality Rate Over Time by Gender"
+#| fig.width: 7
+#| fig.height: 4
+#| fig.align: center
+#| echo: false
+#| warning: false
+#| message: false
+
+# Step 1: Ensure reported_date is in Date format if not already done
+cleaned_covid_data$reported_date <- as.Date(cleaned_covid_data$reported_date)
+
+# Step 2: Aggregate data by gender and month, calculate mortality rate for each month
+mortality_by_gender_month <- cleaned_covid_data %>%
+  mutate(month = floor_date(reported_date, "month")) %>%  # Create a new column for month
+  group_by(client_gender, month) %>%
+  summarize(
+    total_cases = n(),
+    fatal_cases = sum(outcome == "FATAL"),
+    mortality_rate = ifelse(total_cases > 0, fatal_cases / total_cases * 100, NA)
+  ) %>%
+  filter(!is.na(mortality_rate))  # Remove rows where mortality_rate is NA
+
+# Custom color palette for genders
+gender_colors <- c(
+  "MALE" = "#1f77b4",   # Blue
+  "FEMALE" = "#ff7f0e", # Orange
+  "OTHER" = "#2ca02c"   # Green
+)
+
+# Step 3: Plot the mortality rate over time (monthly aggregation) by gender with custom colors
+ggplot(mortality_by_gender_month, aes(x = month, y = mortality_rate, color = client_gender)) +
+  geom_line(size = 1) +  # Create a line plot for each gender
+  scale_color_manual(values = gender_colors) +  # Apply custom colors
+  labs(
+    title = "Mortality Rate Over Time by Gender (Monthly Aggregated Data)",
+    x = "Date",
+    y = "Mortality Rate (%)",
+    color = "Gender"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 14),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8)
+  )
+```
 # Discussion {#sec-discussion}
 
 ## Effect of Age on Outcomes
@@ -474,7 +579,7 @@ Reference the importance of @fig-treatmentoutcomes - those intubated have almost
 
 Measurement weaknesses (stopped collecting data), might be important to look at selection biases (are there more male cases than females? what about Other genders? are they affect results?
 
-\newpage
+
 
 # LLM Disclosure
 
