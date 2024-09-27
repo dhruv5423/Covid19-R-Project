@@ -10,7 +10,6 @@
 
 #### Workspace setup ####
 library(tidyverse)
-library(dplyr)
 
 #### Simulate data ####
 
