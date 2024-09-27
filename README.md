@@ -10,6 +10,7 @@ The repo is structured as:
 
 -   `data/raw_data` contains the Raw COVID-19 Data downloaded from Open Data Toronto.
 -   `data/analysis_data` contains the Cleaned COVID-19 data set that was constructed using the raw data.
+-   `data/simulated_data` contains a detailed simulation of the data, prior to the analysis.
 -   `other` contains sketches made prior to starting the project and chat history with ChatGPT Data Analyst.
 -   `paper` contains the .qmd file used to generate the paper, a reference bibliography file, and the PDF output of the paper.
 -   `scripts` contains the R scripts used to simulate, download and clean and test the COVID-19 data.
